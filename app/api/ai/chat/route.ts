@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     console.error('Chat API error:', error)
     const { model } = await request.json().catch(() => ({ model: 'unknown' }))
     return NextResponse.json({ 
-      response: `Error with ${model} API: ${error.message}`,
+      response: `Error with ${model} API: ${error instanceof Error ? error.message : 'Unknown error'}`,
       error: true 
     })
   }
