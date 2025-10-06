@@ -37,7 +37,7 @@ export function EmailAssistant({ clientName = 'Client' }: EmailAssistantProps) {
       setGeneratedEmail(data.content || 'No content generated')
     } catch (error) {
       console.error('Email generation error:', error)
-      setGeneratedEmail('Error generating email: ' + error.message)
+      setGeneratedEmail('Error generating email: ' + (error instanceof Error ? error.message : 'Unknown error'))
     }
     setLoading(false)
   }
