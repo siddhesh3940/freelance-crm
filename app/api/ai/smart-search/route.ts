@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
       totalClients: clients.length,
       totalProjects: projects.length,
       totalInvoices: invoices.length,
-      unpaidInvoices: invoices.filter(inv => inv.status === 'PENDING').length,
+      unpaidInvoices: invoices.filter(inv => inv.status === 'SENT' || inv.status === 'OVERDUE').length,
       activeProjects: projects.filter(proj => proj.status === 'ACTIVE').length,
       completedProjects: projects.filter(proj => proj.status === 'COMPLETED').length
     }
