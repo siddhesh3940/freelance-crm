@@ -14,6 +14,13 @@ interface Stats {
 export function DashboardStats() {
   const [stats, setStats] = useState<Stats | null>(null)
   const [loading, setLoading] = useState(true)
+  
+  const formatAmount = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(amount)
+  }
 
   useEffect(() => {
     fetchStats()
@@ -22,10 +29,20 @@ export function DashboardStats() {
   const fetchStats = async () => {
     try {
       const response = await fetch('/api/dashboard/stats')
+      if (!response.ok) {
+        throw new Error('Failed to fetch stats')
+      }
       const data = await response.json()
       setStats(data)
     } catch (error) {
       console.error('Failed to fetch stats:', error)
+      // Set default stats on error
+      setStats({
+        totalRevenue: 0,
+        activeProjects: 0,
+        pendingInvoices: 0,
+        activeClients: 0
+      })
     } finally {
       setLoading(false)
     }
@@ -53,7 +70,7 @@ export function DashboardStats() {
   const statsData = [
     {
       title: 'Total Revenue',
-      value: `$${stats.totalRevenue.toLocaleString()}`,
+      value: formatAmount(stats.totalRevenue),
       icon: DollarSign,
       color: 'from-green-500 to-emerald-600',
       bgColor: 'bg-green-50'
@@ -82,7 +99,11 @@ export function DashboardStats() {
   ]
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="space-y-4">
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-semibold">Overview</h2>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {statsData.map((stat, index) => {
         const Icon = stat.icon
         return (
@@ -105,6 +126,7 @@ export function DashboardStats() {
           </Card>
         )
       })}
+      </div>
     </div>
   )
 }

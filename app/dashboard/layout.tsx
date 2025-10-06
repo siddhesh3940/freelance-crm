@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Sidebar } from '@/components/dashboard/sidebar'
+import { CurrencyProvider } from '@/contexts/currency-context'
 
 export default function DashboardLayout({
   children,
@@ -36,7 +37,8 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="flex h-screen crm-bg grid-pattern relative overflow-hidden">
+    <CurrencyProvider>
+      <div className="flex h-screen crm-bg grid-pattern relative overflow-hidden">
       <div className="absolute inset-0 circuit-pattern opacity-40" />
       <div className="absolute inset-0 data-flow opacity-20" />
       
@@ -86,6 +88,7 @@ export default function DashboardLayout({
           </div>
         </div>
       </main>
-    </div>
+      </div>
+    </CurrencyProvider>
   )
 }

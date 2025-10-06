@@ -2,7 +2,8 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { formatCurrency, formatDate } from '@/lib/utils'
+import { useCurrency } from '@/contexts/currency-context'
+import { formatDate } from '@/lib/utils'
 import { Eye, Send, Download } from 'lucide-react'
 import Link from 'next/link'
 
@@ -36,6 +37,8 @@ const statusColors = {
 }
 
 export function InvoiceList({ invoices, isLoading }: InvoiceListProps) {
+  const { formatAmount } = useCurrency()
+  
   const downloadInvoice = async (invoiceId: string, invoiceNumber: string) => {
     try {
       const response = await fetch(`/api/invoices/${invoiceId}/download`)
@@ -93,7 +96,7 @@ export function InvoiceList({ invoices, isLoading }: InvoiceListProps) {
               </div>
               
               <div className="text-right">
-                <div className="text-2xl font-bold">{formatCurrency(invoice.total)}</div>
+                <div className="text-2xl font-bold">{formatAmount(invoice.total)}</div>
                 <div className="flex gap-2 mt-2">
                   <Link href={`/dashboard/invoices/${invoice.id}`}>
                     <Button size="sm" variant="outline">

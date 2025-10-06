@@ -5,11 +5,13 @@ import { useQuery } from '@tanstack/react-query'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ProjectForm } from '@/components/projects/project-form'
+import { useCurrency } from '@/contexts/currency-context'
 import { Plus, FolderOpen, Calendar, DollarSign } from 'lucide-react'
-import { formatCurrency, formatDate } from '@/lib/utils'
+import { formatDate } from '@/lib/utils'
 
 export default function ProjectsPage() {
   const [showForm, setShowForm] = useState(false)
+  const { formatAmount } = useCurrency()
 
   const { data: projects, isLoading } = useQuery({
     queryKey: ['projects'],
@@ -76,7 +78,7 @@ export default function ProjectsPage() {
                     {project.budget && (
                       <div className="flex items-center text-gray-600">
                         <DollarSign className="w-4 h-4 mr-1" />
-                        {formatCurrency(project.budget)}
+                        {formatAmount(project.budget)}
                       </div>
                     )}
                     <div className="mt-2">

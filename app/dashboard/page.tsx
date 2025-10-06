@@ -87,26 +87,26 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <button className="p-4 text-left border-2 border-dashed border-blue-200 rounded-xl hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 transform hover:scale-105 group">
+              <Link href="/dashboard/clients" className="p-4 text-left border-2 border-dashed border-blue-200 rounded-xl hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 transform hover:scale-105 group block">
                 <Users className="w-6 h-6 text-blue-500 mb-2 group-hover:scale-110 transition-transform" />
                 <div className="font-medium text-slate-800">New Client</div>
                 <div className="text-sm text-slate-600">Add a new client</div>
-              </button>
-              <button className="p-4 text-left border-2 border-dashed border-green-200 rounded-xl hover:border-green-400 hover:bg-green-50 transition-all duration-200 transform hover:scale-105 group">
+              </Link>
+              <Link href="/dashboard/invoices" className="p-4 text-left border-2 border-dashed border-green-200 rounded-xl hover:border-green-400 hover:bg-green-50 transition-all duration-200 transform hover:scale-105 group block">
                 <FileText className="w-6 h-6 text-green-500 mb-2 group-hover:scale-110 transition-transform" />
                 <div className="font-medium text-slate-800">Create Invoice</div>
                 <div className="text-sm text-slate-600">Generate new invoice</div>
-              </button>
-              <button className="p-4 text-left border-2 border-dashed border-purple-200 rounded-xl hover:border-purple-400 hover:bg-purple-50 transition-all duration-200 transform hover:scale-105 group">
+              </Link>
+              <Link href="/dashboard/projects" className="p-4 text-left border-2 border-dashed border-purple-200 rounded-xl hover:border-purple-400 hover:bg-purple-50 transition-all duration-200 transform hover:scale-105 group block">
                 <FolderOpen className="w-6 h-6 text-purple-500 mb-2 group-hover:scale-110 transition-transform" />
                 <div className="font-medium text-slate-800">New Project</div>
                 <div className="text-sm text-slate-600">Start a new project</div>
-              </button>
-              <button className="p-4 text-left border-2 border-dashed border-orange-200 rounded-xl hover:border-orange-400 hover:bg-orange-50 transition-all duration-200 transform hover:scale-105 group">
+              </Link>
+              <Link href="/dashboard/tasks" className="p-4 text-left border-2 border-dashed border-orange-200 rounded-xl hover:border-orange-400 hover:bg-orange-50 transition-all duration-200 transform hover:scale-105 group block">
                 <CheckSquare className="w-6 h-6 text-orange-500 mb-2 group-hover:scale-110 transition-transform" />
                 <div className="font-medium text-slate-800">Add Task</div>
                 <div className="text-sm text-slate-600">Create a new task</div>
-              </button>
+              </Link>
             </div>
           </CardContent>
         </Card>
