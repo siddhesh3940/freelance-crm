@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Email template generation error:', error)
     return NextResponse.json({ 
-      content: 'Error generating email template: ' + error.message 
+      content: 'Error generating email template: ' + (error instanceof Error ? error.message : 'Unknown error')
     }, { status: 500 })
   }
 }
