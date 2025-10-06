@@ -1169,7 +1169,7 @@ export async function POST() {
   } catch (error) {
     console.error('Seed error:', error)
     return NextResponse.json({ 
-      error: 'Failed to create sample data: ' + error.message 
+      error: 'Failed to create sample data: ' + (error instanceof Error ? error.message : 'Unknown error') 
     }, { status: 500 })
   }
 }
