@@ -2,21 +2,7 @@ import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 
 export async function POST() {
-  // Return success message without database operations for demo
-  return NextResponse.json({ 
-    message: 'Demo mode: Sample data simulation completed! The app is ready to use with demo data.',
-    data: {
-      clients: 15,
-      projects: 16,
-      tasks: 23,
-      invoices: 5,
-      items: 7,
-      communications: 5
-    }
-  })
-  
-  // Commented out database operations until DB is properly configured
-  /*
+  // Create actual sample data in database
   try {
     // Create user
     await db.user.upsert({
