@@ -14,7 +14,7 @@ export async function GET() {
       .reduce((sum, invoice) => sum + invoice.total, 0)
 
     const activeProjects = projects.filter(project => project.status === 'ACTIVE').length
-    const pendingInvoices = invoices.filter(invoice => invoice.status === 'PENDING').length
+    const pendingInvoices = invoices.filter(invoice => invoice.status === 'SENT' || invoice.status === 'OVERDUE').length
     const activeClients = clients.length
 
     return NextResponse.json({
