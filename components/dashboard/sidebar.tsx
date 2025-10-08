@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import { CurrencySelector } from '@/components/ui/currency-selector'
 import { 
   LayoutDashboard, 
   Users, 
@@ -36,7 +37,7 @@ export function Sidebar() {
       
       {/* Header */}
       <div className="p-6 relative z-10">
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-3 mb-4">
           <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg animate-pulse">
             <Brain className="w-6 h-6 text-white" />
           </div>
@@ -44,6 +45,12 @@ export function Sidebar() {
             <h2 className="text-xl font-bold text-white">Freelance CRM</h2>
             <p className="text-slate-400 text-xs">AI-Powered Business</p>
           </div>
+        </div>
+        
+        {/* Currency Selector */}
+        <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg p-3 border border-slate-700/50">
+          <div className="text-slate-300 text-xs mb-2 font-medium">Currency</div>
+          <CurrencySelector />
         </div>
       </div>
       

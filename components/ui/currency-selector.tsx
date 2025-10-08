@@ -10,7 +10,7 @@ export function CurrencySelector() {
   return (
     <div className="flex items-center space-x-2">
       <Select value={currency} onValueChange={setCurrency}>
-        <SelectTrigger className="w-24">
+        <SelectTrigger className="w-20 h-8 bg-slate-700/50 border-slate-600 text-white text-xs">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -29,8 +29,8 @@ export function CurrencySelector() {
         </SelectContent>
       </Select>
       {rates && (
-        <span className="text-xs text-gray-500">
-          1 USD = ₹{rates.INR.toFixed(2)}
+        <span className="text-xs text-slate-400">
+          1 USD = ₹{rates.INR.toFixed(0)}
         </span>
       )}
     </div>
