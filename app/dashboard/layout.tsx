@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Sidebar } from '@/components/dashboard/sidebar'
 import { CurrencyProvider } from '@/contexts/currency-context'
+import { FloatingChat } from '@/components/ui/floating-chat'
 
 export default function DashboardLayout({
   children,
@@ -88,6 +89,7 @@ export default function DashboardLayout({
           </div>
         </div>
       </main>
+      <FloatingChat />
       </div>
     </CurrencyProvider>
   )

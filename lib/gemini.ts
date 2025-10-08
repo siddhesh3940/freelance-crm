@@ -7,6 +7,21 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '')
 export async function generateAIResponse(prompt: string): Promise<string> {
   console.log('=== AI Response Generation Started ===')
   console.log('Prompt:', prompt)
+  
+  // Add CRM context restriction to all prompts
+  const restrictedPrompt = `You are a professional CRM assistant for freelancers and small businesses. Only respond to queries related to:
+- Client relationship management
+- Project management
+- Invoice and billing
+- Business communications
+- Task management
+- Financial tracking
+- Professional services
+
+If the query is not business/CRM related, politely decline and redirect to business topics.
+
+User query: ${prompt}`
+  
   console.log('Available APIs:', {
     groq: !!process.env.GROQ_API_KEY,
     openai: !!process.env.OPENAI_API_KEY,
@@ -17,7 +32,7 @@ export async function generateAIResponse(prompt: string): Promise<string> {
   if (process.env.GROQ_API_KEY) {
     try {
       console.log('Attempting Groq API...')
-      const result = await generateGroqResponse(prompt)
+      const result = await generateGroqResponse(restrictedPrompt)
       console.log('Groq success:', result)
       return result
     } catch (error) {
@@ -29,7 +44,7 @@ export async function generateAIResponse(prompt: string): Promise<string> {
   if (process.env.OPENAI_API_KEY) {
     try {
       console.log('Attempting OpenAI API...')
-      const result = await generateOpenAIResponse(prompt)
+      const result = await generateOpenAIResponse(restrictedPrompt)
       console.log('OpenAI success:', result)
       return result
     } catch (error) {
@@ -42,7 +57,7 @@ export async function generateAIResponse(prompt: string): Promise<string> {
     try {
       console.log('Attempting Gemini API...')
       const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
-      const result = await model.generateContent(prompt)
+      const result = await model.generateContent(restrictedPrompt)
       const response = await result.response
       const text = response.text()
       console.log('Gemini success:', text)

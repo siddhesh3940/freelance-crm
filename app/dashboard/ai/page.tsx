@@ -158,6 +158,55 @@ function SmartInvoiceGenerator() {
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [currentInvoice, setCurrentInvoice] = useState(null)
+
+  const downloadPDF = (invoice) => {
+    const content = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h1 style="color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px;">INVOICE</h1>
+        <div style="margin: 20px 0;">
+          <p><strong>Client:</strong> ${invoice.clientName || 'Client Name'}</p>
+          <p><strong>Project:</strong> ${invoice.projectName || 'AI Generated Project'}</p>
+          <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+        </div>
+        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+          <thead>
+            <tr style="background-color: #f8f9fa;">
+              <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Description</th>
+              <th style="border: 1px solid #ddd; padding: 12px; text-align: center;">Qty</th>
+              <th style="border: 1px solid #ddd; padding: 12px; text-align: right;">Rate</th>
+              <th style="border: 1px solid #ddd; padding: 12px; text-align: right;">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${invoice.items.map(item => `
+              <tr>
+                <td style="border: 1px solid #ddd; padding: 12px;">${item.description}</td>
+                <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">${item.quantity}</td>
+                <td style="border: 1px solid #ddd; padding: 12px; text-align: right;">$${item.rate}</td>
+                <td style="border: 1px solid #ddd; padding: 12px; text-align: right;">$${item.amount}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        <div style="text-align: right; margin-top: 20px;">
+          <p style="font-size: 18px; font-weight: bold;">Total: $${invoice.total}</p>
+        </div>
+      </div>
+    `
+    
+    const printWindow = window.open('', '_blank')
+    if (printWindow) {
+      printWindow.document.write(`
+        <html>
+          <head><title>Invoice</title></head>
+          <body>${content}</body>
+        </html>
+      `)
+      printWindow.document.close()
+      printWindow.print()
+    }
+  }
 
   const sendMessage = async () => {
     if (!input.trim()) return
@@ -175,11 +224,24 @@ function SmartInvoiceGenerator() {
       })
       const result = await response.json()
       
-      const aiMessage = {
-        role: 'assistant',
-        content: `Here are your invoice items:\n\n${JSON.stringify(result.items || result, null, 2)}`
+      if (result.items) {
+        const subtotal = result.items.reduce((sum, item) => sum + item.amount, 0)
+        const invoice = {
+          clientName: 'Client Name',
+          projectName: 'AI Generated Project',
+          items: result.items,
+          subtotal,
+          total: subtotal
+        }
+        setCurrentInvoice(invoice)
+        
+        const aiMessage = {
+          role: 'assistant',
+          content: 'I\'ve generated a professional invoice based on your requirements. You can preview it below and download as PDF.',
+          invoice
+        }
+        setMessages(prev => [...prev, aiMessage])
       }
-      setMessages(prev => [...prev, aiMessage])
     } catch (error) {
       const errorMessage = {
         role: 'assistant',
@@ -208,7 +270,38 @@ function SmartInvoiceGenerator() {
                   ? 'bg-blue-500 text-white' 
                   : 'bg-gray-100 text-gray-900'
               }`}>
-                <pre className="text-sm whitespace-pre-wrap font-sans">{message.content}</pre>
+                <div className="text-sm whitespace-pre-wrap font-sans">{message.content}</div>
+                {message.invoice && (
+                  <div className="mt-3 p-3 bg-white border rounded-lg">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-semibold text-gray-800">Invoice Preview</h4>
+                      <Button size="sm" onClick={() => downloadPDF(message.invoice)} className="text-xs">
+                        <FileText className="w-3 h-3 mr-1" />
+                        Download PDF
+                      </Button>
+                    </div>
+                    <div className="text-xs text-gray-600 mb-2">
+                      <div>Client: {message.invoice.clientName}</div>
+                      <div>Project: {message.invoice.projectName}</div>
+                      <div>Date: {new Date().toLocaleDateString()}</div>
+                    </div>
+                    <div className="space-y-1">
+                      {message.invoice.items.map((item, idx) => (
+                        <div key={idx} className="flex justify-between text-xs border-b pb-1">
+                          <div>
+                            <div className="font-medium">{item.description}</div>
+                            <div className="text-gray-500">{item.quantity} × ${item.rate}</div>
+                          </div>
+                          <span className="font-medium">${item.amount}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="border-t mt-2 pt-2 flex justify-between text-sm font-bold">
+                      <span>Total:</span>
+                      <span>${message.invoice.total}</span>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           ))}

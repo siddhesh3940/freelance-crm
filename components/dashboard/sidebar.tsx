@@ -22,7 +22,6 @@ const navigation = [
   { name: 'Invoices', href: '/dashboard/invoices', icon: FileText },
   { name: 'Tasks', href: '/dashboard/tasks', icon: CheckSquare },
   { name: 'AI Assistant', href: '/dashboard/ai', icon: Brain },
-  { name: 'AI Chat', href: '/dashboard/chat', icon: MessageCircle },
   { name: 'Settings', href: '/dashboard/settings', icon: Settings },
 ]
 
